@@ -5,17 +5,21 @@ const Navbar = ({ socket }) => {
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
 
-  // useEffect(() => {
-  //   socket.on("getNotification", (data) => {
-  //     setNotifications((prev) => [...prev, data]);
-  //   });
-  // }, [socket]);
+  // get notification
+  useEffect(() => {
+    socket.on("getNotification", (data) => {
+      setNotifications((prev) => [...prev, data]);
+    });
+  }, [socket]);
 
+  // set notification set
   const displayNotification = ({ senderName, type }) => {
     let action;
 
     if (type === 1) {
       action = "liked";
+    } else if (type === -1) {
+      action = "removed like from";
     } else if (type === 2) {
       action = "commented";
     } else {
@@ -26,6 +30,7 @@ const Navbar = ({ socket }) => {
     );
   };
 
+  // handle notification
   const handleRead = () => {
     setNotifications([]);
     setOpen(false);
@@ -36,19 +41,21 @@ const Navbar = ({ socket }) => {
       <span className="logo">Lama App</span>
       <div className="icons">
         <div className="icon" onClick={() => setOpen(!open)}>
-          <img src="../../images/notification.svg" 
-            className="iconImg" alt="" />
+          <img src="../../images/notification.svg"
+            className="iconImg" alt="" 
+          />
           {
             notifications.length > 0 &&
             <div className="counter">{notifications.length}</div>
           }
         </div>
         <div className="icon" onClick={() => setOpen(!open)}>
-          <img src="../../images/message.svg" 
-            className="iconImg" alt="" />
+          <img src="../../images/message.svg"
+            className="iconImg" alt="" 
+          />
         </div>
         <div className="icon" onClick={() => setOpen(!open)}>
-          <img src="../../images/settings.svg" 
+          <img src="../../images/settings.svg"
             className="iconImg" alt="" />
         </div>
       </div>

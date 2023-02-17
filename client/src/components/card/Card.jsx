@@ -5,12 +5,15 @@ const Card = ({ post, socket, user }) => {
     const [liked, setLiked] = useState(false);
 
     const handleNotification = (type) => {
-        type === 1 && setLiked(true);
-        // socket.emit("sendNotification", {
-        //   senderName: user,
-        //   receiverName: post.username,
-        //   type,
-        // });
+        type === 1 && setLiked(!liked);
+        type === -1 && setLiked(!liked);
+
+        // send notification
+        socket.emit("sendNotification", {
+          senderName: user,
+          receiverName: post.username,
+          type,
+        });
     };
 
     return (
@@ -23,7 +26,9 @@ const Card = ({ post, socket, user }) => {
             <div className="interaction">
                 {liked ? (
                     <img src="../../images/heartFilled.svg" alt=""
-                        className="cardIcon" />
+                        className="cardIcon" 
+                        onClick={() => handleNotification(-1)}
+                    />
                 ) : (
                     <img
                         src="../../images/heart.svg"
